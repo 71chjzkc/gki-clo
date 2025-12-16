@@ -173,6 +173,7 @@ sphinx_*/
 # Rust analyzer configuration
 /rust-project.json
 
-
 # Xiaomi Add
 drivers/misc/hwid/
+
+*.zip
