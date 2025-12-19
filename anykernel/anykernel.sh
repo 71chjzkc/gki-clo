@@ -35,6 +35,11 @@ no_magisk_check=1
 kernel_version=$(cat /proc/version | awk -F '-' '{print $1}' | awk '{print $3}')
 
 ui_print "Flashing Cabybara CLO Kernel 1.0..."
+ui_print " "
+ui_print " "
+ui_print "   *******************************************"
+ui_print "   *  MERRY CHRISTMAS AND A HAPPY NEW YEAR! *"
+ui_print "   *******************************************"
 
 # boot install
 if [ -L "/dev/block/bootdevice/by-name/init_boot_a" -o -L "/dev/block/by-name/init_boot_a" ]; then
