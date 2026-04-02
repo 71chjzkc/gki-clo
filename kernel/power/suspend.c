@@ -31,7 +31,6 @@
 #include <linux/compiler.h>
 #include <linux/moduleparam.h>
 #include <linux/wakeup_reason.h>
-#include <linux/workqueue.h>
 #include <trace/hooks/suspend.h>
 
 #include "power.h"
@@ -419,7 +418,6 @@ void __weak arch_suspend_enable_irqs(void)
 	local_irq_enable();
 }
 
-
 static bool pm_fs_abort;
 module_param(pm_fs_abort, bool, 0644);
 MODULE_PARM_DESC(pm_fs_abort,
@@ -681,13 +679,14 @@ static int enter_state(suspend_state_t state)
 	if (state == PM_SUSPEND_TO_IDLE)
 		s2idle_begin();
 
-	pm_wakeup_clear(0);
 	if (sync_on_suspend_enabled) {
 		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
-		error = suspend_fs_sync_with_abort();
-		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
+
+		error = pm_sleep_fs_sync();
 		if (error)
 			goto Unlock;
+
+		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
 	}
 
 	pm_pr_dbg("Preparing system for sleep (%s)\n", mem_sleep_labels[state]);
